@@ -4,13 +4,13 @@ with Ada.Calendar; use Ada.Calendar;
 
 procedure Main is
 
-   dim : constant Long_Long_Integer := 200000;
+   number_of_cells : constant Long_Long_Integer := 200000;
    thread_num : constant Long_Long_Integer := 4;
    index_random: Long_Long_Integer;
-   arr : array(0..dim) of Long_Long_Integer;
+   arr : array(0..number_of_cells) of Long_Long_Integer;
 
    procedure randomN is
-      type randRange is new Long_Long_Integer range 1..dim;
+      type randRange is new Long_Long_Integer range 1..number_of_cells;
       package Rand_Int is new ada.numerics.discrete_random(randRange);
       use Rand_Int;
       gen : Generator;
@@ -23,7 +23,7 @@ procedure Main is
 
    procedure Init_Arr is
    begin
-      for i in 1..dim loop
+      for i in 1..number_of_cells loop
          arr(i) := i;
       end loop;
       randomN;
@@ -63,7 +63,7 @@ procedure Main is
          end if;
          tasks_count := tasks_count + 1;
       end set_part_min;
-      entry get_min(min2 : out Long_Long_Integer) when tasks_count = thread_num is-- while(tasks_count != thread_num)
+      entry get_min(min2 : out Long_Long_Integer) when tasks_count = thread_num is -- while(tasks_count != thread_num)
       begin
          min2 := min1;
       end get_min;
@@ -87,13 +87,13 @@ procedure Main is
    function parallel_sum return Long_Long_Integer is
       min : Long_Long_Integer := 0;
       thread : array(1..thread_num) of starter_thread;
-      len : Long_Long_Integer:= dim/thread_num;
+      len : Long_Long_Integer:= number_of_cells/thread_num;
    begin
       for i in  1..thread_num-1 loop
          thread(i).start((i-1)*len,i*len);
 
       end loop;
-      thread(thread_num).start(len*(thread_num-1), dim);
+      thread(thread_num).start(len*(thread_num-1), number_of_cells);
       part_manager.get_min(min);
       return min;
    end parallel_sum;
@@ -103,12 +103,12 @@ procedure Main is
 begin
    Init_Arr;
    time:=Clock;
-   rezult:=part_min(0, dim);
-   finish_time:=time-Clock;
-   Put_Line(rezult'img &" one thread time: " & finish_time'img);
+   rezult:=part_min(0, number_of_cells);
+   finish_time:=Clock-time;
+   Put_Line(rezult'img &" one thread time: " & finish_time'img & " seconds");
    time:=Clock;
    rezult:=parallel_sum;
-   finish_time:=time-Clock;
-   Put_Line(rezult'img &" more thread time: " & finish_time'img);
+   finish_time:=Clock-time;
+   Put_Line(rezult'img &" more thread time: " & finish_time'img & " seconds");
 end Main;
 
