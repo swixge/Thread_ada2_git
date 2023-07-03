@@ -5,28 +5,15 @@ with Ada.Calendar; use Ada.Calendar;
 procedure Main is
 
    number_of_cells : constant Long_Long_Integer := 200000;
-   thread_num : constant Long_Long_Integer := 4;
-   index_random: Long_Long_Integer;
+   thread_num : constant Long_Long_Integer := 2;
+   index_random: Long_Long_Integer := 4567;
    arr : array(0..number_of_cells) of Long_Long_Integer;
-
-   procedure randomN is
-      type randRange is new Long_Long_Integer range 1..number_of_cells;
-      package Rand_Int is new ada.numerics.discrete_random(randRange);
-      use Rand_Int;
-      gen : Generator;
-      num : randRange;
-   begin
-      reset(gen);
-      num := random(gen);
-      index_random :=Long_Long_Integer(num);
-   end randomN;
 
    procedure Init_Arr is
    begin
       for i in 1..number_of_cells loop
          arr(i) := i;
       end loop;
-      randomN;
       arr(index_random):=arr(index_random)*(-1);
    end Init_Arr;
 
