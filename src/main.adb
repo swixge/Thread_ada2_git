@@ -5,7 +5,7 @@ with Ada.Calendar; use Ada.Calendar;
 procedure Main is
 
    number_of_cells : constant Long_Long_Integer := 200000;
-   thread_num : constant Long_Long_Integer := 2;
+   thread_num : constant Long_Long_Integer := 4;
    index_random: Long_Long_Integer := 4567;
    arr : array(0..number_of_cells) of Long_Long_Integer;
 
@@ -42,9 +42,7 @@ procedure Main is
 
    protected body part_manager is
       procedure set_part_min(min : in Long_Long_Integer) is
-
       begin
-
          if (min1>min) then
             min1 :=min;
          end if;
